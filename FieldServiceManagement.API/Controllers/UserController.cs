@@ -23,7 +23,7 @@ namespace FieldServiceManagement.API.Controllers
             return ActionResultInstance(await _userService.CreateUserAsync(createUserDto));
         }
         [Authorize]
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> GetUser()
         {
             return ActionResultInstance(await _userService.GetUserByNameAsync(HttpContext.User.Identity.Name));

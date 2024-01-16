@@ -8,11 +8,6 @@ using FieldServiceManagement.Core.UniOfWorks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FieldServiceManagement.Service.Services
 {
@@ -70,7 +65,7 @@ namespace FieldServiceManagement.Service.Services
         {
             var existRefreshToken = await _userRefreshTokenService.Where(x => x.Code == refreshToken).SingleOrDefaultAsync();
             if (existRefreshToken == null) return Response<TokenDto>.Fail("Refresh token not found", 404, true);
-            var user = await _userManager.FindByIdAsync(existRefreshToken.ToString());
+            var user = await _userManager.FindByIdAsync(existRefreshToken.AppUserId.ToString());
             if (user == null) return Response<TokenDto>.Fail("User Id not found", 404, true);
             var tokenDto = _tokenService.CreateToken(user);
             existRefreshToken.Code = tokenDto.RefreshToken;

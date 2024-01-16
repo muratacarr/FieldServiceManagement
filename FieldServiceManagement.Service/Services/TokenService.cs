@@ -2,6 +2,7 @@
 using FieldServiceManagement.Core.DTOs;
 using FieldServiceManagement.Core.Entities;
 using FieldServiceManagement.Core.Services;
+using FieldServiceManagement.Service.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -20,11 +21,13 @@ namespace FieldServiceManagement.Service.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly CustomTokenOption _tokenOption;
+        private readonly UserHelper _userHelper;
 
-        public TokenService(UserManager<AppUser> userManager, IOptions<CustomTokenOption> options)
+        public TokenService(UserManager<AppUser> userManager, IOptions<CustomTokenOption> options, UserHelper userHelper)
         {
             _userManager = userManager;
             _tokenOption = options.Value;
+            _userHelper = userHelper;
         }
 
 
@@ -103,8 +106,11 @@ namespace FieldServiceManagement.Service.Services
                 new Claim(ClaimTypes.NameIdentifier,userApp.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,userApp.Email),
                 new Claim(ClaimTypes.Name,userApp.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                
             };
+            var userRole = _userHelper.GetUserRole(userApp);
+            if (userRole != "Rol Yok") userList.Add(new Claim(ClaimTypes.Role, userRole));
             userList.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
 
             return userList;

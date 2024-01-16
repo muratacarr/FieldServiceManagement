@@ -6,6 +6,7 @@ using FieldServiceManagement.Core.UniOfWorks;
 using FieldServiceManagement.Repository.Contexts;
 using FieldServiceManagement.Repository.Repositories;
 using FieldServiceManagement.Repository.UniOfWorks;
+using FieldServiceManagement.Service.Helpers;
 using FieldServiceManagement.Service.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
+builder.Services.AddScoped<UserHelper>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
