@@ -3,11 +3,6 @@ using FieldServiceManagement.Core.Entities;
 using FieldServiceManagement.Core.Services;
 using FieldServiceManagement.Service.Mapping;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FieldServiceManagement.Service.Services
 {
@@ -22,7 +17,7 @@ namespace FieldServiceManagement.Service.Services
 
         public async Task<Response<AppUserDto>> CreateUserAsync(CreateUserDto createUserDto)
         {
-            var user = new AppUser { Email = createUserDto.Email, UserName = createUserDto.Username };
+            var user = new AppUser { Email = createUserDto.Email, Name = createUserDto.Name, Surname=createUserDto.Surname, ZoneId = createUserDto.ZoneId, UserName = createUserDto.UserName };
 
             var result = await _userManager.CreateAsync(user, createUserDto.Password);
 

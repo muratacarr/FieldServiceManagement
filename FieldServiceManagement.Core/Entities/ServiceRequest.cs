@@ -14,6 +14,7 @@ namespace FieldServiceManagement.Core.Entities
         public int ProductId { get; set; }
         public Product Product { get; set; } = null!;
         public DateTime RequestDate { get; set; }
+        public int ZoneId { get; set; }
         public string IssueDescription { get; set; } = null!;
         public string Status { get; set; } = null!;
         public ICollection<JobAssignment>? JobAssignments { get; set; }

@@ -1,7 +1,11 @@
-﻿using FieldServiceManagement.Core.Entities;
-using FieldServiceManagement.Core.Repositories;
+﻿using FieldServiceManagement.Core.Repositories;
 using FieldServiceManagement.Repository.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace FieldServiceManagement.Repository.Repositories
 {

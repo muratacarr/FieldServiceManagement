@@ -14,6 +14,7 @@ namespace FieldServiceManagement.Service.Mapping
         public DtoMapper()
         {
             CreateMap<AppUserDto, AppUser>().ReverseMap();
+            CreateMap<ZoneDto, Zone>().ReverseMap();
         }
     }
 }

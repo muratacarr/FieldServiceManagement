@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using static FieldServiceManagement.Core.Services.IGenericService;
 
 namespace FieldServiceManagement.Service.Services
 {
@@ -22,12 +23,14 @@ namespace FieldServiceManagement.Service.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly CustomTokenOption _tokenOption;
         private readonly UserHelper _userHelper;
+        private readonly IGenericService<Zone,ZoneDto> _genericService;
 
-        public TokenService(UserManager<AppUser> userManager, IOptions<CustomTokenOption> options, UserHelper userHelper)
+        public TokenService(UserManager<AppUser> userManager, IOptions<CustomTokenOption> options, UserHelper userHelper, IGenericService<Zone, ZoneDto> genericService)
         {
             _userManager = userManager;
             _tokenOption = options.Value;
             _userHelper = userHelper;
+            _genericService = genericService;
         }
 
 
@@ -101,12 +104,17 @@ namespace FieldServiceManagement.Service.Services
         }
         private IEnumerable<Claim> GetClaim(AppUser userApp, List<string> audiences)
         {
+            var zone=_genericService.GetbyIdAsync(userApp.ZoneId).Result.Data;
+
             var userList = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier,userApp.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,userApp.Email),
                 new Claim(ClaimTypes.Name,userApp.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim("Name",userApp.Name),
+                new Claim("Surname",userApp.Surname),
+                new Claim("Zone",zone.Name)
                 
             };
             var userRole = _userHelper.GetUserRole(userApp);

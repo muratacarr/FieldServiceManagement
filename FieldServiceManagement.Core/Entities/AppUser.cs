@@ -12,6 +12,10 @@ namespace FieldServiceManagement.Core.Entities
     public class AppUser : IdentityUser<int>
     {
         public override int Id { get => base.Id; set => base.Id = value; }
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
+        public int ZoneId { get; set; }
+        public Zone Zone { get; set; } = null!;
         public string? City { get; set; }
         public ICollection<ServiceRequest>? ServiceRequests { get; set; }
         public ICollection<Payment>? Payments { get; set; }

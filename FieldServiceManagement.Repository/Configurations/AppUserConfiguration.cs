@@ -15,6 +15,7 @@ namespace FieldServiceManagement.Repository.Configurations
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
             builder.HasOne(x => x.UserRefreshToken).WithOne(x => x.AppUser).HasForeignKey<UserRefreshToken>(x => x.AppUserId);
+            builder.HasOne(x => x.Zone).WithMany(x => x.AppUsers).HasForeignKey(x => x.ZoneId);
         }
     }
 }

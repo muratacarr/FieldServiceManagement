@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FieldServiceManagement.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240112083950_Initial")]
+    [Migration("20240118133143_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -53,6 +53,29 @@ namespace FieldServiceManagement.Repository.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConcurrencyStamp = "1",
+                            Name = "musteri",
+                            NormalizedName = "MUSTERI"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ConcurrencyStamp = "2",
+                            Name = "bayi",
+                            NormalizedName = "BAYI"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ConcurrencyStamp = "3",
+                            Name = "teknisyen",
+                            NormalizedName = "TEKNISYEN"
+                        });
                 });
 
             modelBuilder.Entity("FieldServiceManagement.Core.Entities.AppUser", b =>
@@ -86,6 +109,9 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -106,12 +132,18 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("ZoneId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -122,6 +154,8 @@ namespace FieldServiceManagement.Repository.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ZoneId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -229,10 +263,6 @@ namespace FieldServiceManagement.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
@@ -246,6 +276,57 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Price = 2000,
+                            ProductName = "Lavabo Bataryası",
+                            Quantity = 100
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Price = 3000,
+                            ProductName = "Banyo Bataryası",
+                            Quantity = 200
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Price = 4000,
+                            ProductName = "Duş Bataryası",
+                            Quantity = 600
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Price = 7000,
+                            ProductName = "Küvet Bataryası",
+                            Quantity = 500
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Price = 2000,
+                            ProductName = "Bide Bataryaları",
+                            Quantity = 400
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Price = 9000,
+                            ProductName = "Termostatik Bataryalar",
+                            Quantity = 200
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Price = 1000,
+                            ProductName = "Musluklar",
+                            Quantity = 50
+                        });
                 });
 
             modelBuilder.Entity("FieldServiceManagement.Core.Entities.ServiceRequest", b =>
@@ -273,6 +354,9 @@ namespace FieldServiceManagement.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ZoneId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
@@ -280,6 +364,40 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ServiceRequests");
+                });
+
+            modelBuilder.Entity("FieldServiceManagement.Core.Entities.Zone", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Zones");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Buca"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Çiğli"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Bornova"
+                        });
                 });
 
             modelBuilder.Entity("FieldServiceManagement.Core.Models.UserRefreshToken", b =>
@@ -410,6 +528,17 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("FieldServiceManagement.Core.Entities.AppUser", b =>
+                {
+                    b.HasOne("FieldServiceManagement.Core.Entities.Zone", "Zone")
+                        .WithMany("AppUsers")
+                        .HasForeignKey("ZoneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Zone");
                 });
 
             modelBuilder.Entity("FieldServiceManagement.Core.Entities.CustomerFeedback", b =>
@@ -565,6 +694,11 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.Navigation("JobAssignments");
 
                     b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("FieldServiceManagement.Core.Entities.Zone", b =>
+                {
+                    b.Navigation("AppUsers");
                 });
 #pragma warning restore 612, 618
         }

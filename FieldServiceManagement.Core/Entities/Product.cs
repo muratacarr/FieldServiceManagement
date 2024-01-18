@@ -10,7 +10,6 @@ namespace FieldServiceManagement.Core.Entities
     {
         public int Id { get; set; }
         public string ProductName { get; set; } = null!;
-        public string Description { get; set; } = null!;
         public int Price { get; set; }
         public int Quantity { get; set; }
         public ICollection<ServiceRequest>? ServiceRequests { get; set; }
