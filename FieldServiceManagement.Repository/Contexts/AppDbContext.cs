@@ -23,6 +23,7 @@ namespace FieldServiceManagement.Repository.Contexts
         public DbSet<CustomerFeedback> CustomerFeedbacks { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Status> Statuses { get; set; }
         public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
         public DbSet<Zone> Zones { get; set; }
 

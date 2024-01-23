@@ -31,7 +31,7 @@ namespace FieldServiceManagement.Repository.Repositories
             _dbSet.Remove(entity);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }

@@ -25,12 +25,21 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
+
+builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
+builder.Services.AddScoped<IServiceRequestRepository, ServiceRequestRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IJobAssignmentService, JobAssignmentService>();
+builder.Services.AddScoped<IJobAssignmentRepository, JobAssigmentRepository>();
+
 builder.Services.AddScoped<UserHelper>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOptions"));
 builder.Services.Configure<List<Client>>(builder.Configuration.GetSection("Clients"));
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

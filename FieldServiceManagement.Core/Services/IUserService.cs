@@ -11,5 +11,6 @@ namespace FieldServiceManagement.Core.Services
     {
         Task<Response<AppUserDto>> CreateUserAsync(CreateUserDto createUserDto);
         Task<Response<AppUserDto>> GetUserByNameAsync(string name);
+        Task<Response<List<GetUserByRoleDto>>> GetTechniciansAsync();
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FieldServiceManagement.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240118133143_Initial")]
-    partial class Initial
+    [Migration("20240123131353_JobAssignment-prop-update")]
+    partial class JobAssignmentpropupdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -209,14 +209,10 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.Property<int>("ServiceRequestId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("TakeJobDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TechnicianId")
+                    b.Property<int?>("TechnicianId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -350,9 +346,8 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ZoneId")
                         .HasColumnType("int");
@@ -363,7 +358,73 @@ namespace FieldServiceManagement.Repository.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("StatusId");
+
                     b.ToTable("ServiceRequests");
+                });
+
+            modelBuilder.Entity("FieldServiceManagement.Core.Entities.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Açık"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Onayda"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Atama Bekliyor"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Teknisyende"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Adrese Geliyor"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Çalışma Yapılıyor"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Ödeme Bekliyor"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Tamamlandı"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Kapandı"
+                        });
                 });
 
             modelBuilder.Entity("FieldServiceManagement.Core.Entities.Zone", b =>
@@ -562,9 +623,7 @@ namespace FieldServiceManagement.Repository.Migrations
 
                     b.HasOne("FieldServiceManagement.Core.Entities.AppUser", "AppUserTechnician")
                         .WithMany("JobAssignments")
-                        .HasForeignKey("TechnicianId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TechnicianId");
 
                     b.Navigation("AppUserTechnician");
 
@@ -604,9 +663,17 @@ namespace FieldServiceManagement.Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FieldServiceManagement.Core.Entities.Status", "Status")
+                        .WithMany("ServiceRequests")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("AppUser");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("FieldServiceManagement.Core.Models.UserRefreshToken", b =>
@@ -694,6 +761,11 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.Navigation("JobAssignments");
 
                     b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("FieldServiceManagement.Core.Entities.Status", b =>
+                {
+                    b.Navigation("ServiceRequests");
                 });
 
             modelBuilder.Entity("FieldServiceManagement.Core.Entities.Zone", b =>

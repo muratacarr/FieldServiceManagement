@@ -4,6 +4,7 @@ using FieldServiceManagement.Repository.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FieldServiceManagement.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240123051159_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,7 +212,7 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.Property<DateTime?>("TakeJobDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TechnicianId")
+                    b.Property<int>("TechnicianId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -620,7 +623,9 @@ namespace FieldServiceManagement.Repository.Migrations
 
                     b.HasOne("FieldServiceManagement.Core.Entities.AppUser", "AppUserTechnician")
                         .WithMany("JobAssignments")
-                        .HasForeignKey("TechnicianId");
+                        .HasForeignKey("TechnicianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUserTechnician");
 

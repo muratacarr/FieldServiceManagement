@@ -44,6 +44,19 @@ namespace FieldServiceManagement.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Statuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Statuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Zones",
                 columns: table => new
                 {
@@ -209,7 +222,7 @@ namespace FieldServiceManagement.Repository.Migrations
                     RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ZoneId = table.Column<int>(type: "int", nullable: false),
                     IssueDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -224,6 +237,12 @@ namespace FieldServiceManagement.Repository.Migrations
                         name: "FK_ServiceRequests_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ServiceRequests_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -280,7 +299,6 @@ namespace FieldServiceManagement.Repository.Migrations
                     TechnicianId = table.Column<int>(type: "int", nullable: false),
                     ServiceRequestId = table.Column<int>(type: "int", nullable: false),
                     AssignmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlanDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TakeJobDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FinishJobDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -351,6 +369,22 @@ namespace FieldServiceManagement.Repository.Migrations
                     { 5, 2000, "Bide Bataryaları", 400 },
                     { 6, 9000, "Termostatik Bataryalar", 200 },
                     { 7, 1000, "Musluklar", 50 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Statuses",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Açık" },
+                    { 2, "Onayda" },
+                    { 3, "Atama Bekliyor" },
+                    { 4, "Teknisyende" },
+                    { 5, "Adrese Geliyor" },
+                    { 6, "Çalışma Yapılıyor" },
+                    { 7, "Ödeme Bekliyor" },
+                    { 8, "Tamamlandı" },
+                    { 9, "Kapandı" }
                 });
 
             migrationBuilder.InsertData(
@@ -445,6 +479,11 @@ namespace FieldServiceManagement.Repository.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ServiceRequests_StatusId",
+                table: "ServiceRequests",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRefreshTokens_AppUserId",
                 table: "UserRefreshTokens",
                 column: "AppUserId",
@@ -492,6 +531,9 @@ namespace FieldServiceManagement.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Statuses");
 
             migrationBuilder.DropTable(
                 name: "Zones");

@@ -1,7 +1,6 @@
 ﻿using FieldServiceManagement.Core.DTOs;
 using FieldServiceManagement.Core.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FieldServiceManagement.API.Controllers
@@ -27,6 +26,11 @@ namespace FieldServiceManagement.API.Controllers
         public async Task<IActionResult> GetUser()
         {
             return ActionResultInstance(await _userService.GetUserByNameAsync(HttpContext.User.Identity.Name));
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetTechnicians()
+        {
+            return ActionResultInstance(await _userService.GetTechniciansAsync());
         }
     }
 }
