@@ -14,11 +14,15 @@ namespace FieldServiceManagement.Service.Mapping
         public DtoMapper()
         {
             CreateMap<AppUserDto, AppUser>().ReverseMap();
+            CreateMap<AppUserForServiceRequestDto, AppUser>().ReverseMap();
             CreateMap<GetUserByRoleDto, AppUser>().ReverseMap();
             CreateMap<ServiceRequest, ServiceRequestDto>().ReverseMap();
             CreateMap<Product, GetProductDto>().ReverseMap();
             CreateMap<JobAssignment, JobAssignmentDto>().ReverseMap();
+            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Status, StatusDto>().ReverseMap();
             CreateMap<ZoneDto, Zone>().ReverseMap();
+
         }
     }
 }

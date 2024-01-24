@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace FieldServiceManagement.Core.DTOs
 {
-    public class CreateServiceRequestDto
+    public class UpdateStatusOfServiceRequestDto
     {
-        public int CustomerId { get; set; }
-        public int ProductId { get; set; }
-        public DateTime RequestDate { get; set; }
-        public string IssueDescription { get; set; } = null!;
+        public int Id { get; set; }
         public int StatusId { get; set; }
     }
 }

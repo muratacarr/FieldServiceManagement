@@ -14,11 +14,10 @@ namespace FieldServiceManagement.Core.Entities
         public int ProductId { get; set; }
         public Product Product { get; set; } = null!;
         public DateTime RequestDate { get; set; }
-        public int ZoneId { get; set; }
         public string IssueDescription { get; set; } = null!;
         public int StatusId { get; set; }
         public Status Status { get; set; } = null!;
-        public ICollection<JobAssignment>? JobAssignments { get; set; }
+        public JobAssignment? JobAssignment { get; set; }
         public CustomerFeedback? CustomerFeedback { get; set; }
         public Payment? Payment { get; set; }
     }

@@ -31,7 +31,6 @@ namespace FieldServiceManagement.Service.Services
                 CustomerId = createServiceRequestDto.CustomerId,
                 ProductId = createServiceRequestDto.ProductId,
                 RequestDate = createServiceRequestDto.RequestDate,
-                ZoneId = createServiceRequestDto.ZoneId,
                 IssueDescription = createServiceRequestDto.IssueDescription,
                 StatusId = createServiceRequestDto.StatusId
             };
@@ -48,7 +47,8 @@ namespace FieldServiceManagement.Service.Services
 
         public async Task<Response<List<ServiceRequestDto>>> GetOpenServiceRequestAsync()
         {
-            var result = await _serviceRequestRepository.Where(x => x.StatusId==1).ToListAsync();
+            //var result = await _serviceRequestRepository.Where(x => x.StatusId==1).ToListAsync();
+            var result = await _serviceRequestRepository.GetOpenServiceRequestWithUserStatusProductAsync();
             if (result.Count == 0)
             {
                 return Response<List<ServiceRequestDto>>.Fail(new ErrorDto("Servis talebi yok", true), 400);
@@ -58,12 +58,23 @@ namespace FieldServiceManagement.Service.Services
 
         public async Task<Response<List<ServiceRequestDto>>> GetServiceRequestByCustomerIdAsync(GetServiceRequestDto getServiceRequestDto)
         {
-            var result = await _serviceRequestRepository.Where(x => x.CustomerId == getServiceRequestDto.CustomerId).ToListAsync();
+            //var result = await _serviceRequestRepository.Where(x => x.CustomerId == getServiceRequestDto.CustomerId).ToListAsync();
+            var result = await _serviceRequestRepository.GetServiceRequestByCustomerIdWithUserAndStatusAsync(getServiceRequestDto.CustomerId);
             if (result.Count == 0)
             {
                 return Response<List<ServiceRequestDto>>.Fail(new ErrorDto("Servis talebi yok", true), 400);
             }
             return Response<List<ServiceRequestDto>>.Success(ObjectMapper.Mapper.Map<List<ServiceRequestDto>>(result), 200);
+        }
+
+        public async Task<Response<NoDataDto>> UpdateStatusOfServiceRequestAsync(UpdateStatusOfServiceRequestDto updateStatusOfServiceRequestDto)
+        {
+            
+            var result= await _serviceRequestRepository.Where(x=>x.Id==updateStatusOfServiceRequestDto.Id).FirstOrDefaultAsync();
+            if (result == null) return Response<NoDataDto>.Fail(new ErrorDto("Servis talebi yok", true), 400);
+            result.StatusId=updateStatusOfServiceRequestDto.StatusId;
+            await _unitOfWork.SaveChangesAsync();
+            return Response<NoDataDto>.Success(200);
         }
     }
 }

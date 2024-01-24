@@ -9,6 +9,7 @@ namespace FieldServiceManagement.Core.Repositories
 {
     public interface IJobAssignmentRepository : IGenericRepository<JobAssignment>
     {
-
+        Task<List<JobAssignment>> GetJobAssignmentWithServiceRequestAsync();
+        Task<List<JobAssignment>> GetJobsByTechnicianIdWithServiceRequestAsync(int technicianId);
     }
 }

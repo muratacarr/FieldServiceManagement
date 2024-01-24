@@ -11,8 +11,8 @@ namespace FieldServiceManagement.Repository.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly AppDbContext _appDbContext;
-        private readonly DbSet<T> _dbSet;
+        protected readonly AppDbContext _appDbContext;
+        protected readonly DbSet<T> _dbSet;
 
         public GenericRepository(AppDbContext appDbContext)
         {

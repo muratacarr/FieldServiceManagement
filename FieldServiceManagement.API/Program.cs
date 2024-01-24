@@ -32,6 +32,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IJobAssignmentService, JobAssignmentService>();
 builder.Services.AddScoped<IJobAssignmentRepository, JobAssigmentRepository>();
+builder.Services.AddScoped<IStatusService, StatusService>();
+builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 
 builder.Services.AddScoped<UserHelper>();
 

@@ -13,5 +13,6 @@ namespace FieldServiceManagement.Core.Services
     {
         Task<Response<List<JobAssignmentDto>>> GetJobAssignmentAsync();
         Task<Response<JobAssignmentDto>> CreateJobAssignmentAsync(CreateJobAssignmentDto createJobAssignmentDto);
+        Task<Response<List<JobAssignmentDto>>> GetJobsByTechnicianIdAsync(int technicianId);
     }
 }

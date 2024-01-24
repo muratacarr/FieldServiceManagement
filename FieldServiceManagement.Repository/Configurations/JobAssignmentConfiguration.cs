@@ -14,7 +14,7 @@ namespace FieldServiceManagement.Repository.Configurations
         public void Configure(EntityTypeBuilder<JobAssignment> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.HasOne(x=>x.ServiceRequest).WithMany(x=>x.JobAssignments).HasForeignKey(x=>x.ServiceRequestId).OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(x=>x.ServiceRequest).WithMany(x=>x.JobAssignments).HasForeignKey(x=>x.ServiceRequestId).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(x => x.AppUserTechnician).WithMany(x => x.JobAssignments).HasForeignKey(x => x.TechnicianId);
         }
     }

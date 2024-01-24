@@ -18,6 +18,7 @@ namespace FieldServiceManagement.Repository.Configurations
             builder.HasOne(x => x.Product).WithMany(x => x.ServiceRequests).HasForeignKey(x => x.ProductId);
             builder.HasOne(x => x.Status).WithMany(x => x.ServiceRequests).HasForeignKey(x => x.StatusId);
             builder.HasOne(x => x.Payment).WithOne(x => x.ServiceRequest).HasForeignKey<Payment>(x => x.ServiceRequestId);
+            builder.HasOne(x => x.JobAssignment).WithOne(x => x.ServiceRequest).HasForeignKey<JobAssignment>(x => x.ServiceRequestId);
             builder.HasOne(x => x.CustomerFeedback).WithOne(x => x.ServiceRequest).HasForeignKey<CustomerFeedback>(x => x.ServiceRequestId);
         }
     }

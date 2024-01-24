@@ -26,6 +26,11 @@ namespace FieldServiceManagement.API.Controllers
         {
             return ActionResultInstance(await _jobAssignmentService.CreateJobAssignmentAsync(createJobAssignmentDto));
         }
+        [HttpPost]
+        public async Task<IActionResult> GetJobsByTechnicianId(int technicianId)
+        {
+            return ActionResultInstance(await _jobAssignmentService.GetJobsByTechnicianIdAsync(technicianId));
+        }
     }
 
 }

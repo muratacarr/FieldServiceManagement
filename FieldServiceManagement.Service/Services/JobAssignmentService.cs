@@ -5,6 +5,7 @@ using FieldServiceManagement.Core.Services;
 using FieldServiceManagement.Core.UniOfWorks;
 using FieldServiceManagement.Repository.Repositories;
 using FieldServiceManagement.Service.Mapping;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,8 @@ namespace FieldServiceManagement.Service.Services
         {
             var jobAssignment = new JobAssignment
             {
-                ServiceRequestId=createJobAssignmentDto.ServiceRequestId,
-                AssignmentDate=createJobAssignmentDto.AssignmentDate
+                ServiceRequestId = createJobAssignmentDto.ServiceRequestId,
+                AssignmentDate = createJobAssignmentDto.AssignmentDate
             };
             var result = await _jobAssignmentRepository.AddAsync(jobAssignment);
             await _unitOfWork.SaveChangesAsync();
@@ -43,7 +44,19 @@ namespace FieldServiceManagement.Service.Services
 
         public async Task<Response<List<JobAssignmentDto>>> GetJobAssignmentAsync()
         {
-            var result = await _jobAssignmentRepository.GetAllAsync();
+            //var result = await _jobAssignmentRepository.GetAllAsync();
+            var result = await _jobAssignmentRepository.GetJobAssignmentWithServiceRequestAsync();
+            if (result.Count == 0)
+            {
+                return Response<List<JobAssignmentDto>>.Fail(new ErrorDto("İş talebi yok", true), 400);
+            }
+            return Response<List<JobAssignmentDto>>.Success(ObjectMapper.Mapper.Map<List<JobAssignmentDto>>(result), 200);
+        }
+
+        public async Task<Response<List<JobAssignmentDto>>> GetJobsByTechnicianIdAsync(int technicianId)
+        {
+            //var result = await _jobAssignmentRepository.Where(x => x.TechnicianId == technicianId).ToListAsync();
+            var result = await _jobAssignmentRepository.GetJobsByTechnicianIdWithServiceRequestAsync(technicianId);
             if (result.Count == 0)
             {
                 return Response<List<JobAssignmentDto>>.Fail(new ErrorDto("İş talebi yok", true), 400);

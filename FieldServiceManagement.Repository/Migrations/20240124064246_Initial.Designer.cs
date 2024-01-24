@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FieldServiceManagement.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240123051159_Initial")]
+    [Migration("20240124064246_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -212,12 +212,13 @@ namespace FieldServiceManagement.Repository.Migrations
                     b.Property<DateTime?>("TakeJobDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TechnicianId")
+                    b.Property<int?>("TechnicianId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ServiceRequestId");
+                    b.HasIndex("ServiceRequestId")
+                        .IsUnique();
 
                     b.HasIndex("TechnicianId");
 
@@ -375,6 +376,9 @@ namespace FieldServiceManagement.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Percent")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Statuses");
@@ -383,47 +387,68 @@ namespace FieldServiceManagement.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Açık"
+                            Name = "Açık",
+                            Percent = 10
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Onayda"
+                            Name = "Onaylandı",
+                            Percent = 20
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Atama Bekliyor"
+                            Name = "Atama Bekliyor",
+                            Percent = 30
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Teknisyende"
+                            Name = "Teknisyende",
+                            Percent = 40
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Adrese Geliyor"
+                            Name = "Adrese Geliyor",
+                            Percent = 50
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Çalışma Yapılıyor"
+                            Name = "Çalışma Yapılıyor",
+                            Percent = 60
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Ödeme Bekliyor"
+                            Name = "Ödeme Bekliyor",
+                            Percent = 70
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Tamamlandı"
+                            Name = "Tamamlandı",
+                            Percent = 80
                         },
                         new
                         {
                             Id = 9,
-                            Name = "Kapandı"
+                            Name = "Oylama Bekliyor",
+                            Percent = 90
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Kapandı",
+                            Percent = 100
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Reddedildi",
+                            Percent = 0
                         });
                 });
 
@@ -616,16 +641,14 @@ namespace FieldServiceManagement.Repository.Migrations
             modelBuilder.Entity("FieldServiceManagement.Core.Entities.JobAssignment", b =>
                 {
                     b.HasOne("FieldServiceManagement.Core.Entities.ServiceRequest", "ServiceRequest")
-                        .WithMany("JobAssignments")
-                        .HasForeignKey("ServiceRequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithOne("JobAssignment")
+                        .HasForeignKey("FieldServiceManagement.Core.Entities.JobAssignment", "ServiceRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FieldServiceManagement.Core.Entities.AppUser", "AppUserTechnician")
                         .WithMany("JobAssignments")
-                        .HasForeignKey("TechnicianId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TechnicianId");
 
                     b.Navigation("AppUserTechnician");
 
@@ -760,7 +783,7 @@ namespace FieldServiceManagement.Repository.Migrations
                 {
                     b.Navigation("CustomerFeedback");
 
-                    b.Navigation("JobAssignments");
+                    b.Navigation("JobAssignment");
 
                     b.Navigation("Payment");
                 });

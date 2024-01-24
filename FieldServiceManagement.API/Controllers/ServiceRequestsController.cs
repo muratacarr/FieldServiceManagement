@@ -30,5 +30,10 @@ namespace FieldServiceManagement.API.Controllers
         {
             return ActionResultInstance(await _serviceRequestService.GetOpenServiceRequestAsync());
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateStatusOfServiceRequestAsync(UpdateStatusOfServiceRequestDto updateStatusOfServiceRequestDto)
+        {
+            return ActionResultInstance(await _serviceRequestService.UpdateStatusOfServiceRequestAsync(updateStatusOfServiceRequestDto));
+        }
     }
 }

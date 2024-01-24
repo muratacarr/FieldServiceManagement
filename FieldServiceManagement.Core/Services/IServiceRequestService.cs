@@ -12,5 +12,6 @@ namespace FieldServiceManagement.Core.Services
         Task<Response<ServiceRequestDto>> CreateServiceRequestAsync(CreateServiceRequestDto createServiceRequestDto);
         Task<Response<List<ServiceRequestDto>>> GetServiceRequestByCustomerIdAsync(GetServiceRequestDto getServiceRequestDto);
         Task<Response<List<ServiceRequestDto>>> GetOpenServiceRequestAsync();
+        Task<Response<NoDataDto>> UpdateStatusOfServiceRequestAsync(UpdateStatusOfServiceRequestDto updateStatusOfServiceRequestDto);
     }
 }

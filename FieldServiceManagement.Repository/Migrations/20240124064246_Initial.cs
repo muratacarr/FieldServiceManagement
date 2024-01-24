@@ -49,7 +49,8 @@ namespace FieldServiceManagement.Repository.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Percent = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -296,7 +297,7 @@ namespace FieldServiceManagement.Repository.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TechnicianId = table.Column<int>(type: "int", nullable: false),
+                    TechnicianId = table.Column<int>(type: "int", nullable: true),
                     ServiceRequestId = table.Column<int>(type: "int", nullable: false),
                     AssignmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PlanDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -310,14 +311,13 @@ namespace FieldServiceManagement.Repository.Migrations
                         name: "FK_JobAssignments_AspNetUsers_TechnicianId",
                         column: x => x.TechnicianId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_JobAssignments_ServiceRequests_ServiceRequestId",
                         column: x => x.ServiceRequestId,
                         principalTable: "ServiceRequests",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -373,18 +373,20 @@ namespace FieldServiceManagement.Repository.Migrations
 
             migrationBuilder.InsertData(
                 table: "Statuses",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "Name", "Percent" },
                 values: new object[,]
                 {
-                    { 1, "Açık" },
-                    { 2, "Onayda" },
-                    { 3, "Atama Bekliyor" },
-                    { 4, "Teknisyende" },
-                    { 5, "Adrese Geliyor" },
-                    { 6, "Çalışma Yapılıyor" },
-                    { 7, "Ödeme Bekliyor" },
-                    { 8, "Tamamlandı" },
-                    { 9, "Kapandı" }
+                    { 1, "Açık", 10 },
+                    { 2, "Onaylandı", 20 },
+                    { 3, "Atama Bekliyor", 30 },
+                    { 4, "Teknisyende", 40 },
+                    { 5, "Adrese Geliyor", 50 },
+                    { 6, "Çalışma Yapılıyor", 60 },
+                    { 7, "Ödeme Bekliyor", 70 },
+                    { 8, "Tamamlandı", 80 },
+                    { 9, "Oylama Bekliyor", 90 },
+                    { 10, "Kapandı", 100 },
+                    { 11, "Reddedildi", 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -450,7 +452,8 @@ namespace FieldServiceManagement.Repository.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_JobAssignments_ServiceRequestId",
                 table: "JobAssignments",
-                column: "ServiceRequestId");
+                column: "ServiceRequestId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobAssignments_TechnicianId",
